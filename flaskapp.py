@@ -16,11 +16,17 @@ def home():
     # Query the top 10 movies from the mySQL movie database
     movies = get_top_movies()
 
-    # Convert each row (tuple) into a dictionary for template use
-    top_movies = [{'title': row[0], 'popularity': row[1]} for row in movies]
-
     # Render the template with the list of movies
-    return render_template('home_movies.html', top_movies=top_movies)
+    return render_template('home_movies.html', top_movies=movies)
+
+@app.route('/genre')
+def genre():
+    # Query the top 10 movies with genre from the mySQL movie database
+    movies = get_top_movie_genres()
+
+    # Render the template with list of movies
+    return render_template('genre_movies.html', top_genres = movies)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

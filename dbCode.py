@@ -2,6 +2,7 @@
 # Description: 
 
 import pymysql
+import pymysql.cursors
 import creds 
 
 # ----------------------------------
@@ -19,6 +20,7 @@ def get_conn():
         user= creds.user, 
         password = creds.password,
         db=creds.db,
+        cursorclass= pymysql.cursors.DictCursor
         )
     return conn
 
@@ -27,11 +29,14 @@ def execute_query(query, args=()):
     Execute a SQL Query using a connection to RDS.
     Closes the connection automatically after closing the query
     '''
-    cur = get_conn().cursor()
-    cur.execute(query, args)
-    rows = cur.fetchall()
-    cur.close()
-    return rows
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(query, args)
+            rows = cur.fetchall()
+        return rows
+    finally:
+        cur.close()
 
 #----------------------------------
 # Section 2: MySQL Queries
@@ -47,3 +52,16 @@ def get_top_movies():
 
     return execute_query(query)
 
+def get_top_movie_genres():
+    '''
+    Returns the top 10 movies from the table including title, popularity, and genre
+    '''
+    query = """
+        SELECT movie.title, movie.popularity, genre.genre_name 
+        FROM movie 
+        JOIN movie_genres USING (movie_id)
+        JOIN genre USING (genre_id) 
+        ORDER BY movie.popularity DESC 
+        LIMIT 10
+    """
+    return execute_query(query)
