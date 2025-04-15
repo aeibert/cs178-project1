@@ -19,13 +19,17 @@ def home():
     # Render the template with the list of movies
     return render_template('home_movies.html', top_movies=movies)
 
+# ------------------------------
+# Route: Home Page
+# ------------------------------
+
 @app.route('/genre')
 def genre():
-    # Query the top 10 movies with genre from the mySQL movie database
-    movies = get_top_movie_genres()
+    # Query the most popular genres
+    genres = get_top_movie_genres()
 
     # Render the template with list of movies
-    return render_template('genre_movies.html', top_genres = movies)
+    return render_template('genre_movies.html', top_genres = genres)
 
 
 if __name__ == '__main__':
