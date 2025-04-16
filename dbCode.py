@@ -46,7 +46,7 @@ def execute_query(query, args=()):
 def get_top_movies():
     '''
     Returns the top Movies from the table,
-    including Title, Popularity, and Genre. Used on the homepage
+    including Title, Popularity, and Genre.
     '''
     query = """
         SELECT movie.title, movie.popularity, genre.genre_name 
@@ -74,6 +74,25 @@ def get_top_movie_genres():
     """
     return execute_query(query)
 
+def get_movies_by_genre(genre_name):
+    '''
+    Returns top movies for a specific genre
+    I used chatgpt to help write the query so I could get user input
+    '''
+    query = """
+        SELECT movie.title, movie.popularity, genre.genre_name 
+        FROM movie 
+        JOIN movie_genres USING (movie_id)
+        JOIN genre USING (genre_id) 
+        WHERE genre.genre_name = %s 
+        ORDER BY movie.popularity DESC 
+        LIMIT 10
+    """
+    return execute_query(query, (genre_name,))
+
+def get_all_genres():
+    query = "SELECT DISTINCT genre_name FROM genre ORDER BY genre_name"
+    return execute_query(query)
 
 #-----------------------------------
 # Section 3: Connecting to DynamoDB

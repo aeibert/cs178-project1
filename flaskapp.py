@@ -58,33 +58,17 @@ def add_user():
         # Call the function to create the user
         create_user_profile(username, first_name, genre)
 
+        # Message banner
         flash('User added successfully!', 'success')
         
         # Redirect to home page or another page upon successful submission
-        return redirect(url_for('recommend'))
-    else:
-        # Render the form page if the request method is GET
-        return render_template('add_user.html')
+        # I used chatgpt to help fix my issue with this line of code
+        return redirect(url_for('recommendations', username=username))
+
+    # Render the form page if the request method is GET
+    genres = get_all_genres()
+    return render_template('add_user.html', genres=genres)
     
-# ------------------------------
-# Route: Read User Profile
-# ------------------------------
-
-@app.route('/read-user', methods = ['GET', 'POST'] )
-def read_user():
-    # Creates a new user
-    if request.method == 'POST':
-        # Extract form data
-        username = request.form['Username']
-
-        # Call the function to get user info
-        get_user(username)
-        
-        # Redirect to home page or another page upon successful submission
-        return redirect(url_for('home'))
-    else:
-        # Render the form page if the request method is GET
-        return render_template('read_user.html')
 
 # ------------------------------
 # Route: Update User Profile
@@ -101,11 +85,14 @@ def update_user():
         # Call function to update user 
         update_user_genre(username, genre)
 
+        # Successful message banner
         flash('Favorite genre updated!', 'success')
 
+        # Redirect user
         return redirect(url_for('home'))
     else:
-        return render_template('update_user.html')
+        genres = get_all_genres()
+        return render_template('update_user.html', genres=genres)
 
 # ------------------------------
 # Route: Delete User Profile
@@ -121,8 +108,10 @@ def delete_user_profile():
         # Call function to update user 
         delete_user(username)
 
-        flash('User deleted :(', 'success')
+        # Message banner
+        flash('User deleted :(', 'dark')
 
+        # Redirect user
         return redirect(url_for('home'))
     else:
         return render_template('delete_user.html')
@@ -131,13 +120,37 @@ def delete_user_profile():
 # ------------------------------------
 # Route: Recommendations based on User
 # ------------------------------------
-@app.route('/recommend')
-def recommend():
-    genre = request.args.get('genre')
-    movies = get_movies_by_genre(genre)  # You must define this function
-    return render_template('recommendations.html', genre=genre, movies=movies)
+
+# I also used ChatGPT here to create this route
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations():
+    if request.method == 'POST':
+        # User submitted the form on the homepage
+        username = request.form['username']
+    else:
+        # Username passed as query parameter after profile creation
+        username = request.args.get('username')
+
+    if not username:
+        flash("No username provided", "warning")
+        return redirect(url_for('home'))
+
+    user = get_user(username)
+    if user:
+        genre = user['Genre']
+        movie_recs = get_movies_by_genre(genre)
+        return render_template('recommendations.html', genre=genre, movies=movie_recs)
+    else:
+        flash("User not found", "danger")
+        return redirect(url_for('home'))
 
 
+# ------------------------------------
+# Route: Manage User Profile
+# ------------------------------------
+@app.route('/manage-user')
+def manage_user():
+    return render_template('manage_user.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

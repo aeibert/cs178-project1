@@ -1,3 +1,5 @@
+<!-- I used Chatgpt to produce this template -->
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +30,10 @@
     {% else %}
         <p>No recommendations found for this genre.</p>
     {% endif %}
+    <!-- Back to Home Button -->
+    <div class="text-center mt-3">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+    </div>
 </div>
 </body>
 </html>
