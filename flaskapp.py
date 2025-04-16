@@ -122,6 +122,7 @@ def delete_user_profile():
 # ------------------------------------
 
 # I also used ChatGPT here to create this route
+
 @app.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
     if request.method == 'POST':
