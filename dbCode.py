@@ -90,19 +90,54 @@ table = dynamodb.Table(TABLE_NAME)
 # Section 4: CRUD - Users
 #-----------------------------------
 
-def create_user():
-    Username = input("Enter the Title of the movie: ")
-    Ratings = input("Enter the Ratings for the movie: ")
-    Year = input("Enter the Year the movie came out: ")
-    Genre = input("Enter the Genre of the movie: ")
+def create_user_profile(username, first_name, genre):
+    '''
+    Creates a new user profile in the DynamoDB Users table
+    '''
+    try:
+        table.put_item(Item={
+            "Username": username,
+            "First Name": first_name,
+            "Genre": genre
+        })
+        print("User created successfully.")
+    except Exception as e:
+        print(f"Error creating user: {e}")
 
-    movie = {
-        "Title": Title,
-        "Ratings": Ratings,
-        "Year": Year,
-        "Genre": Genre
-    }
+def get_user(username):
+    '''
+    Retrieves a user profile from the Users table
+    '''
+    try:
+        response = table.get_item(Key={'Username': username})
+        return response.get('Item')
+    except Exception as e:
+        print(f"Error retrieving user: {e}")
+        return None
 
-    response = table.put_item(Item = movie)
+def update_user_genre(username, genre):
+    '''
+    Updates a user's favorite genre
+    '''
+    try:
+        table.update_item(
+            Key={"Username": username},
+            UpdateExpression="SET Genre = :g",
+            ExpressionAttributeValues={':g': genre}
+        )
+        print("Genre updated successfully.")
+    except Exception as e:
+        print(f"Error updating genre: {e}")
 
-    print("creating a movie")
+def delete_user(username):
+    '''
+    Deletes a user profile
+    '''
+    try:
+        table.delete_item(Key={"Username": username})
+        print("User deleted successfully.")
+    except Exception as e:
+        print(f"Error deleting user: {e}")
+
+
+
