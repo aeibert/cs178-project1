@@ -46,6 +46,9 @@ def genre():
 # Route: Create User Profile
 # ------------------------------
 
+# I used ChatGPT to help with this route, so that I could
+# redirect users to a recommendation page
+
 @app.route('/add-user', methods = ['GET', 'POST'] )
 def add_user():
     # Creates a new user
@@ -62,7 +65,6 @@ def add_user():
         flash('User added successfully!', 'success')
         
         # Redirect to home page or another page upon successful submission
-        # I used chatgpt to help fix my issue with this line of code
         return redirect(url_for('recommendations', username=username))
 
     # Render the form page if the request method is GET
