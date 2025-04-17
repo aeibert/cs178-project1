@@ -69,7 +69,7 @@ def get_top_movie_genres():
         JOIN movie_genres USING (movie_id)
         JOIN genre USING (genre_id) 
         GROUP BY genre.genre_name
-        ORDER BY movie.popularity DESC 
+        ORDER BY total_popularity DESC 
         LIMIT 15
     """
     return execute_query(query)
