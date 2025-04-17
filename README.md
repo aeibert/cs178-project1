@@ -3,9 +3,20 @@
 This project demonstrates how to build a web application using Flask that connects:
 - A relational database (SQL) using AWS RDS
 - A nonrelational database using AWS DynamoDB
-  
-The project uses a MySQL database to store movie data and DynamoDB to store user profiles. It integrates these technologies in a Flask web application deployed on AWS EC2.
-Users can explore the most popular movies and genres, create and manage user profiles, and receive personalized movie recommendations based on their favorite genre.
+
+Users can:
+- View the most popular movies and genres
+- Create and manage user profiles
+- Recieve movie recommendations based on their favorite genre
+
+## Technologies Used
+- Python
+- Flask
+- mySQL (using AWS RDS)
+- DynamoDB (using AWS)
+- boto3 (AWS SDK for Python)
+- pymysql (mySQL connector)
+- HTML + Bootstrap
 
 ## Getting Started
 1. Clone the Repository
